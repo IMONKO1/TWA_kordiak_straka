@@ -5,7 +5,7 @@ const app = express();
 const port = 8000;
 app.use(express.json());
 
-// Mock data - Sprint 01
+// Mock data - Sprint 01 - Šimon Kordiak
 let machines = [
   { id: uuidv4(), name: "Píla", type: "Ručná", description: "Ručná píla na drevo" },
   { id: uuidv4(), name: "Fréza", type: "Automatická", description: "Fréza pre presné rezy" },

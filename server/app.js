@@ -2,9 +2,9 @@ const express = require('express');
 const Ajv = require('ajv');
 const ajv = new Ajv();
 const app = express();
-app.use(express.json());
 const port = 8000;
 const { v4: uuidv4 } = require('uuid');
+app.use(express.json());
 
 const dreva = []; 
 

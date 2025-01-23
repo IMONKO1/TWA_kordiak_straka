@@ -4,70 +4,94 @@ const ajv = new Ajv();
 const app = express();
 app.use(express.json());
 const port = 8000;
-let machines = new Map();
+const { v4: uuidv4 } = require('uuid');
 
 const dreva = []; 
+
+// Mock data - Sprint 01 Kordiak
+let machines = [
+  { id: uuidv4(), name: "Píla", type: "Ručná", description: "Ručná píla na drevo" },
+  { id: uuidv4(), name: "Fréza", type: "Automatická", description: "Fréza pre presné rezy" },
+];
 
 // Schémy pre validáciu dát
 const machineSchema = {
   type: "object",
   properties: {
-    name: { type: "string", pattern: "^[a-zA-Z]+$" },
-    email: { type: "string", format: "email" },
-    phone: { type: "string", pattern: "^[0-9]{10}$" }
+    name: { type: "string", pattern: "^[a-zA-ZáäčďéíľĺňóôŕšťúýžÁÄČĎÉÍĽĹŇÓÔŔŠŤÚÝŽ\\s]+$" },
+    type: { type: "string" },
+    description: { type: "string" },
   },
-  required: ["name", "email", "phone"],
-  additionalProperties: false
+  required: ["name", "type", "description"],
+  additionalProperties: false,
 };
-
 const validate = ajv.compile(machineSchema);
 
-// Create – vytvorí novy stroj a pridá ho do zoznamu/databázy
-// Implementoval: Šimon Kordiak
-app.post('/create-machine', (req, res) => {
-  const valid = validate(req.body);
-  if (!valid) return res.status(400).send({ message: 'Invalid data', errors: validate.errors.map(error => error.message) });
+// CREATE: Pridanie nového stroja
+// Autor: Šimon Kordiak
+app.post('/machine/create', (req, res) => {
+  const newMachine = req.body;
 
-  const machine = req.body;
-  machines.set(machine.name, machine);
-  res.status(201).send(machine);
+  if (!validateMachine(newMachine)) {
+    return res.status(400).json({ code: "invalid_input", message: "Provided data is not valid", errors: validateMachine.errors });
+  }
+
+  const machine = { id: uuidv4(), ...newMachine };
+  machines.push(machine);
+  res.status(201).json(machine);
 });
 
-// Read – zobrazí všetky stroje ktoré su v zozname
-// Implementoval: Šimon Kordiak
-app.get('/machines', (_req, res) => {
-  res.send(Array.from(machines.values()));
+// READ ALL: Zobrazenie všetkých strojov
+// Autor: Šimon Kordiak
+app.get('/machines', (req, res) => {
+  res.status(200).json(machines);
 });
 
-// Read – zobrazí konkrétny stroj ktorý si vyhľadáme
-// Implementoval: Šimon Kordiak
-app.get('/machine/?name=', (req, res) => {
-  const machine = machines.get(req.params.name);
-  if (!machine) return res.status(404).send('Machine not found');
-  res.send(machine);
+// READ ONE: Zobrazenie konkrétneho stroja podľa ID
+// Autor: Šimon Kordiak
+app.get('/machine/:id', (req, res) => {
+  const { id } = req.params;
+  const machine = machines.find((m) => m.id === id);
+
+  if (!machine) {
+    return res.status(404).json({ code: "not_found", message: "Machine not found" });
+  }
+
+  res.status(200).json(machine);
 });
 
-// Update – upraví informácie o konkrétnom stroji
-// Implementoval: Šimon Kordiak
-app.put('/machine-update/:name', (req, res) => {
-  const valid = validate(req.body);
-  if (!valid) return res.status(400).send({ message: 'Invalid data', errors: validate.errors.map(error => error.message) });
+// UPDATE: Aktualizácia údajov o stroji
+// Autor: Šimon Kordiak
+app.put('/machine/update/:id', (req, res) => {
+  const { id } = req.params;
+  const updatedData = req.body;
 
-  const machine = machines.get(req.params.name);
-  if (!machine) return res.status(404).send('Machine not found');
+  if (!validateMachine(updatedData)) {
+    return res.status(400).json({ code: "invalid_input", message: "Provided data is not valid", errors: validateMachine.errors });
+  }
 
-  machines.set(req.params.name, { ...machine, ...req.body });
-  res.send(req.body);
+  const machineIndex = machines.findIndex((m) => m.id === id);
+
+  if (machineIndex === -1) {
+    return res.status(404).json({ code: "not_found", message: "Machine not found" });
+  }
+
+  machines[machineIndex] = { id, ...updatedData };
+  res.status(200).json(machines[machineIndex]);
 });
 
-// Delete – vymaže stroj ktorý zvolíme
-// Implementoval: Šimon Kordiak
-app.delete('/machine-delete/:name', (req, res) => {
-  const machine = machines.get(req.params.name);
-  if (!machine) return res.status(404).send('Machine not found');
-  const deletedMachine = machines.get(req.params.name);
-  machines.delete(req.params.name);
-  res.send(deletedMachine);
+// DELETE: Odstránenie stroja
+// Autor: Šimon Kordiak
+app.delete('/machine/delete/:id', (req, res) => {
+  const { id } = req.params;
+  const machineIndex = machines.findIndex((m) => m.id === id);
+
+  if (machineIndex === -1) {
+    return res.status(404).json({ code: "not_found", message: "Machine not found" });
+  }
+
+  machines.splice(machineIndex, 1);
+  res.status(200).json({ message: "Machine deleted successfully" });
 });
 
 //Create - vytvorí nový záznam dreva.
@@ -186,5 +210,5 @@ app.post("/drevo/delete", (req, res) => {
 
 // nastavenie portu, na ktorom má bežať HTTP server
 app.listen(port, () => {
- console.log(`Example app listening at http://localhost:${port}`);
+ console.log(`Server beží na http://localhost:${port}`);
 });

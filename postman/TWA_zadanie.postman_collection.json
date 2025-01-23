@@ -1,0 +1,130 @@
+{
+	"info": {
+		"_postman_id": "03c70da9-12f5-4e7f-aa19-43c31ff639e9",
+		"name": "TWA_zadanie",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39479428",
+		"_collection_link": "https://hackeri-1494.postman.co/workspace/HACKERI-Workspace~86f64589-9a81-4ae6-83a6-0ccd1cc7e1d6/collection/39479428-03c70da9-12f5-4e7f-aa19-43c31ff639e9?action=share&source=collection_link&creator=39479428"
+	},
+	"item": [
+		{
+			"name": "Create Machine",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Sušička\",\r\n  \"type\": \"Automatická\",\r\n  \"description\": \"Stroj na sušenie dreva\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/machine/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"machine",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read All Machines",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/machines",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"machines"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read One Machine by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/machine/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"machine",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Machine",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Moderná píla\",\r\n  \"type\": \"Automatická\",\r\n  \"description\": \"Vylepšená píla pre efektívnu prácu\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/machines/update/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"machines",
+						"update",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Machine",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/machines/delete/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"machines",
+						"delete",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

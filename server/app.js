@@ -103,7 +103,7 @@ app.post("/drevo/create", (req, res) => {
       properties: {
           nazov: { type: "string", minLength: 3, maxLength: 50, pattern: "^[a-zA-Z\u00C0-\u017F ]+$" },
           druh: { type: "string", minLength: 3, maxLength: 50 },
-          hustota: { type: "number", minimum: 100, maximum: 1500 },
+          hustota: { type: "integer", minimum: 100, maximum: 1500 },
           farba: { type: "string", minLength: 3, maxLength: 30 }
       },
       required: ["nazov", "druh"],

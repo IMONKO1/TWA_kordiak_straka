@@ -7,9 +7,13 @@ const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
 app.use(express.json());
 
-const dreva = []; 
+// Mock data - Straka
+const dreva = [
+  { id: crypto.randomBytes(16).toString('hex'), nazov: "Dub", druh: "Listnatý", hustota: 800, farba: "hnedá" },
+  { id: crypto.randomBytes(16).toString('hex'), nazov: "Smrek", druh: "Ihličnatý", hustota: 600, farba: "hnedočierna" },
+]; 
 
-// Mock data - Sprint 01 Kordiak
+// Mock data - Kordiak
 let machines = [
   { id: uuidv4(), name: "Píla", type: "Ručná", description: "Ručná píla na drevo" },
   { id: uuidv4(), name: "Fréza", type: "Automatická", description: "Fréza pre presné rezy" },

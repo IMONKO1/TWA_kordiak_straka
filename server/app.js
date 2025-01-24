@@ -26,7 +26,7 @@ const machineSchema = {
   required: ["name", "type", "description"],
   additionalProperties: false,
 };
-const validate = ajv.compile(machineSchema);
+const validateMachine = ajv.compile(machineSchema);
 
 // CREATE: Pridanie nového stroja
 // Autor: Šimon Kordiak

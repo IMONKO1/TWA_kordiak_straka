@@ -4,6 +4,7 @@ const ajv = new Ajv();
 const app = express();
 const port = 8000;
 const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 app.use(express.json());
 
 const dreva = []; 
